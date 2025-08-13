@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexa - Your Fictional Bank</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        :root {
+            --color-dark-background: #0D171A; /* A very dark background to match the brand identity */
+            --color-card-background: #15272E; /* Dark teal from brand */
+            --color-accent-dark: #23414D; /* Secondary dark teal */
+            --color-primary-gold: #FFDC8D; /* Main brand gold */
+            --color-secondary-peach: #FFDEC8; /* Pale peach */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-dark-background);
+            color: #d1d5db; /* Default light text color */
+        }
+        .page-container {
+            display: none;
+            min-height: 100vh;
+            width: 100%;
+        }
+        .show {
+            display: flex;
+        }
+        .text-nexa-gold {
+            color: var(--color-primary-gold);
+        }
+        .bg-nexa-gold {
+            background-color: var(--color-primary-gold);
+        }
+        .hover-bg-nexa-gold-darker:hover {
+            background-color: #e6c880; /* A slightly darker shade for hover effect */
+        }
+        .bg-card {
+            background-color: var(--color-card-background);
+        }
+        .bg-accent-dark {
+            background-color: var(--color-accent-dark);
+        }
+        .nav-active {
+            background-color: var(--color-primary-gold);
+            color: var(--color-card-background);
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-200">
+
+    <!-- Login Page -->
+    <section id="loginPage" class="page-container show items-center justify-center p-4">
+        <div class="w-full max-w-md bg-card rounded-3xl shadow-2xl p-8 sm:p-10">
+            <div class="text-center">
+                <img src="http://googleusercontent.com/file_content/5" alt="Nexa logo" class="h-16 mx-auto">
+                <p class="text-gray-400 mt-4">Welcome back! Please sign in.</p>
+            </div>
+            <div class="mt-8 space-y-4">
+                <input type="email" id="loginEmail" placeholder="Email" class="w-full p-4 rounded-xl border border-gray-600 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-nexa-gold transition-shadow">
+                <input type="password" id="loginPassword" placeholder="Password" class="w-full p-4 rounded-xl border border-gray-600 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-nexa-gold transition-shadow">
+                <button id="loginBtn" class="w-full p-4 bg-nexa-gold text-card rounded-xl font-semibold hover-bg-nexa-gold-darker transition-colors shadow-md">Sign In</button>
+            </div>
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-400">
+                    Don't have an account?
+                    <button id="toSignupLink" class="text-nexa-gold hover:underline font-medium ml-1">Sign up</button>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sign-up Page -->
+    <section id="signupPage" class="page-container items-center justify-center p-4">
+        <div class="w-full max-w-md bg-card rounded-3xl shadow-2xl p-8 sm:p-10">
+            <div class="text-center">
+                <img src="http://googleusercontent.com/file_content/5" alt="Nexa logo" class="h-16 mx-auto">
+                <p class="text-gray-400 mt-4">Create a new account</p>
+            </div>
+            <div class="mt-8 space-y-4">
+                <input type="text" id="signupName" placeholder="Full Name" class="w-full p-4 rounded-xl border border-gray-600 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-nexa-gold transition-shadow">
+                <input type="email" id="signupEmail" placeholder="Email" class="w-full p-4 rounded-xl border border-gray-600 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-nexa-gold transition-shadow">
+                <input type="password" id="signupPassword" placeholder="Password" class="w-full p-4 rounded-xl border border-gray-600 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-nexa-gold transition-shadow">
+                <button id="signupBtn" class="w-full p-4 bg-nexa-gold text-card rounded-xl font-semibold hover-bg-nexa-gold-darker transition-colors shadow-md">Create Account</button>
+            </div>
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-400">
+                    Already have an account?
+                    <button id="toLoginLink" class="text-nexa-gold hover:underline font-medium ml-1">Sign in</button>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard/Main App Page -->
+    <section id="mainAppPage" class="page-container flex-col lg:flex-row p-4 lg:p-8">
+        <!-- Sidebar -->
+        <aside class="w-full lg:w-1/4 p-6 bg-card rounded-3xl shadow-xl flex flex-col items-center space-y-8 lg:mr-8 mb-4 lg:mb-0">
+            <div class="flex items-center w-full justify-center">
+                <img src="http://googleusercontent.com/file_content/5" alt="Nexa logo" class="h-8">
+            </div>
+            <nav class="w-full space-y-2">
+                <a href="#" id="nav-dashboard" class="flex items-center p-3 rounded-xl cursor-pointer transition-colors duration-200 nav-active font-semibold">
+                    <i class="fas fa-home w-5"></i>
+                    <span class="ml-3">Dashboard</span>
+                </a>
+                <a href="#" id="nav-transactions" class="flex items-center p-3 rounded-xl cursor-pointer transition-colors duration-200 text-gray-400 hover:bg-gray-700">
+                    <i class="fas fa-exchange-alt w-5"></i>
+                    <span class="ml-3">Transactions</span>
+                </a>
+                <a href="#" id="nav-wallets" class="flex items-center p-3 rounded-xl cursor-pointer transition-colors duration-200 text-gray-400 hover:bg-gray-700">
+                    <i class="fas fa-wallet w-5"></i>
+                    <span class="ml-3">Wallets</span>
+                </a>
+                <a href="#" id="nav-invoices" class="flex items-center p-3 rounded-xl cursor-pointer transition-colors duration-200 text-gray-400 hover:bg-gray-700">
+                    <i class="fas fa-file-invoice-dollar w-5"></i>
+                    <span class="ml-3">Invoices</span>
+                </a>
+                <a href="#" id="nav-transfer" class="flex items-center p-3 rounded-xl cursor-pointer transition-colors duration-200 text-gray-400 hover:bg-gray-700">
+                    <i class="fas fa-paper-plane w-5"></i>
+                    <span class="ml-3">Transfer</span>
+                </a>
+                <a href="#" id="nav-settings" class="flex items-center p-3 rounded-xl cursor-pointer transition-colors duration-200 text-gray-400 hover:bg-gray-700">
+                    <i class="fas fa-cog w-5"></i>
+                    <span class="ml-3">Settings</span>
+                </a>
+                <a href="#" id="nav-logout" class="flex items-center p-3 rounded-xl cursor-pointer transition-colors duration-200 text-gray-400 hover:bg-gray-700">
+                    <i class="fas fa-sign-out-alt w-5"></i>
+                    <span class="ml-3">Logout</span>
+                </a>
+            </nav>
+            <div class="mt-auto w-full pt-8">
+                <div class="bg-accent-dark text-white p-6 rounded-2xl text-center shadow-md">
+                    <h3 class="font-bold">Total saved</h3>
+                    <p id="totalSaved" class="text-3xl font-extrabold mt-1">$0.00</p>
+                    <button id="withdrawBtn" class="mt-4 px-6 py-2 bg-nexa-gold text-card rounded-full text-sm font-semibold hover-bg-nexa-gold-darker transition-colors">
+                        Withdraw
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="w-full lg:w-3/4 flex flex-col space-y-6">
+            <!-- Header -->
+            <header class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 p-6 bg-card rounded-3xl shadow-xl">
+                <h1 id="mainTitle" class="text-3xl font-extrabold text-gray-50">Dashboard</h1>
+                <div class="flex items-center space-x-4">
+                    <div class="relative hidden sm:block">
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                        <input type="text" placeholder="Search..." class="pl-12 pr-4 py-3 rounded-full border border-gray-600 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-nexa-gold transition-shadow">
+                    </div>
+                    <i class="fas fa-bell text-gray-400 hover:text-gray-200 cursor-pointer transition-colors text-xl"></i>
+                    <a href="#" id="header-settings-btn" class="text-gray-400 hover:text-gray-200 cursor-pointer transition-colors text-xl">
+                        <i class="fas fa-cog"></i>
+                    </a>
+                    <div class="flex items-center space-x-2">
+                        <span id="userName" class="text-sm font-medium">Guest User</span>
+                        <img id="userAvatar" src="https://placehold.co/40x40/cccccc/333333?text=GU" alt="User Avatar" class="w-10 h-10 rounded-full">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dynamic Content based on Navigation -->
+            <div id="dashboardContent" class="flex flex-col space-y-6">
+                <!-- Stats and Cards -->
+                <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-card p-6 rounded-2xl shadow-md">
+                        <h2 class="text-gray-400">Total Balance</h2>
+                        <p id="totalBalance" class="text-4xl font-bold mt-2">$0.00</p>
+                    </div>
+                    <div class="bg-card p-6 rounded-2xl shadow-md">
+                        <h2 class="text-gray-400">Total Income</h2>
+                        <p id="totalIncome" class="text-4xl font-bold mt-2 text-green-400">$0.00</p>
+                    </div>
+                    <div class="bg-card p-6 rounded-2xl shadow-md">
+                        <h2 class="text-gray-400">Total Expenses</h2>
+                        <p id="totalExpenses" class="text-4xl font-bold mt-2 text-red-400">$0.00</p>
+                    </div>
+                </section>
+
+                <!-- Recent Transactions Section -->
+                <section class="bg-card p-6 rounded-2xl shadow-md">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold text-gray-50">Recent Transactions</h2>
+                        <div class="flex space-x-2">
+                            <button id="addTransactionBtn" class="flex items-center px-4 py-2 bg-nexa-gold text-card rounded-full text-sm font-semibold hover-bg-nexa-gold-darker transition-colors">
+                                <i class="fas fa-plus mr-2 text-sm"></i>
+                                Add
+                            </button>
+                            <button id="transferMoneyBtn" class="flex items-center px-4 py-2 bg-nexa-gold text-card rounded-full text-sm font-semibold hover-bg-nexa-gold-darker transition-colors">
+                                <i class="fas fa-paper-plane mr-2 text-sm"></i>
+                                Transfer
+                            </button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-700">
+                            <thead class="bg-accent-dark">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">DESCRIPTION</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">AMOUNT</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">DATE</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dashboardTransactionTableBody" class="bg-card divide-y divide-gray-700">
+                                <!-- Transactions will be rendered here by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- All Transactions Page -->
+            <div id="transactionsContent" class="flex flex-col space-y-6 hidden">
+                <section class="bg-card p-6 rounded-2xl shadow-md">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold text-gray-50">All Transactions</h2>
+                        <button id="addTransactionBtnTrans" class="flex items-center px-4 py-2 bg-nexa-gold text-card rounded-full text-sm font-semibold hover-bg-nexa-gold-darker transition-colors">
+                            <i class="fas fa-plus mr-2 text-sm"></i>
+                            Add New
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-700">
+                            <thead class="bg-accent-dark">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">DESCRIPTION</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">AMOUNT</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">DATE</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allTransactionTableBody" class="bg-card divide-y divide-gray-700">
+                                <!-- All transactions will be rendered here by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Wallets Page -->
+            <div id="walletsContent" class="flex flex-col space-y-6 hidden">
+                <section class="bg-card p-6 rounded-2xl shadow-md">
+                    <h2 class="text-2xl font-bold text-gray-50 mb-4">My Wallets</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Main Wallet Card -->
+                        <div class="bg-accent-dark text-white p-8 rounded-2xl shadow-lg flex flex-col justify-between" style="min-height: 200px;">
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm font-semibold opacity-80">Primary Wallet</span>
+                                    <i class="fas fa-wallet text-2xl opacity-80"></i>
+                                </div>
+                                <p class="text-4xl font-bold mt-4" id="mainWalletBalance">$0.00</p>
+                            </div>
+                            <div class="mt-auto">
+                                <span class="text-sm font-medium" id="walletOwnerName"></span>
+                            </div>
+                        </div>
+                        <!-- Virtual Card Placeholder -->
+                        <div class="bg-gray-800 text-white p-8 rounded-2xl shadow-lg flex flex-col justify-between" style="min-height: 200px;">
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm font-semibold opacity-80">Virtual Card</span>
+                                    <i class="fab fa-cc-mastercard text-2xl opacity-80"></i>
+                                </div>
+                                <p class="text-2xl font-bold mt-4" id="virtualCardNumber">#### #### #### ####</p>
+                            </div>
+                            <div class="mt-auto flex justify-between items-end">
+                                <span class="text-sm font-medium" id="virtualCardOwnerName"></span>
+                                <span class="text-xs">04/24</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Invoices Page -->
+            <div id="invoicesContent" class="flex flex-col space-y-6 hidden">
+                <section class="bg-card p-6 rounded-2xl shadow-md">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold text-gray-50">My Invoices</h2>
+                        <button id="addInvoiceBtn" class="flex items-center px-4 py-2 bg-nexa-gold text-card rounded-full text-sm font-semibold hover-bg-nexa-gold-darker transition-colors">
+                            <i class="fas fa-plus mr-2 text-sm"></i>
+                            New Invoice
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-700">
+                            <thead class="bg-accent-dark">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">INVOICE ID</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">RECIPIENT</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">AMOUNT</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">DUE DATE</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoiceTableBody" class="bg-card divide-y divide-gray-700">
+                                <!-- Invoices will be rendered here by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Transfer Page (New) -->
+            <div id="transferContent" class="flex flex-col space-y-6 hidden">
+                <section class="bg-card p-6 rounded-2xl shadow-md">
+                    <h2 class="text-2xl font-bold text-gray-50 mb-4">Transfer Money</h2>
+                    <div class="space-y-6">
+                        <div>
+                            <label for="transferRecipient" class="block text-sm font-medium text-gray-400 mb-1">Recipient Email</label>
+                            <input type="email" id="transferRecipientEmail" placeholder="Enter recipient's email address" class="w-full p-4 rounded-xl border border-gray-600 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-nexa-gold transition-shadow">
+                        </div>
+                        <div>
+                            <label for="transferAmount" class="block text-sm font-medium text-gray-400 mb-1">Amount</label>
+                            <input type="number" id="transferAmount" placeholder="Enter amount" class="w-full p-4 rounded-xl border border-gray-600 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-nexa-gold transition-shadow">
+                        </div>
+                        <button id="executeTransferBtn" class="w-full p-4 bg-nexa-gold text-card rounded-xl font-semibold hover-bg-nexa-gold-darker transition-colors shadow-md">
+                            Execute Transfer
+                        </button>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Settings Page -->
+            <div id="settingsContent" class="flex flex-col space-y-6 hidden">
+                <section class="bg-card p-6 rounded-2xl shadow-md">
+                    <h2 class="text-2xl font-bold text-gray-50 mb-4">Account Settings</h2>
+                    <form id="settingsForm" class="space-y-4">
+                        <div>
+                            <label for="settingsName" class="block text-sm font-medium text-gray-400">Full Name</label>
+                            <input type="text" id="settingsName" class="mt-1 w-full p-3 rounded-lg border border-gray-600 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-nexa-gold transition-shadow">
+                        </div>
+                        <div>
+                            <label for="settingsEmail" class="block text-sm font-medium text-gray-400">Email Address</label>
+                            <input type="email" id="settingsEmail" class="mt-1 w-full p-3 rounded-lg border border-gray-600 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-nexa-gold transition-shadow" readonly>
+                        </div>
+                        <div>
+                            <label for="settingsPassword" class="block text-sm font-medium text-gray-400">Password</label>
+                            <input type="password" id="settingsPassword" placeholder="Enter new password to change" class="mt-1 w-full p-3 rounded-lg border border-gray-600 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-nexa-gold transition-shadow">
+                        </div>
+                        <button type="submit" id="saveSettingsBtn" class="w-full p-4 bg-nexa-gold text-card rounded-xl font-semibold hover-bg-nexa-gold-darker transition-colors shadow-md">
+                            Save Changes
+                        </button>
+                    </form>
+                </section>
+            </div>
+
+        </main>
+    </section>
+
+    <!-- Add Transaction Modal -->
+    <div id="transactionModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-card rounded-3xl p-8 shadow-2xl max-w-sm w-full relative">
+            <button id="closeTransactionModalBtn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-300 transition-colors text-2xl">
+                <i class="fas fa-times-circle"></i>
+            </button>
+            <div class="text-center">
+                <h3 class="text-2xl font-bold text-gray-50">Add New Transaction</h3>
+            </div>
+            <div class="mt-6 space-y-4">
+                <input type="text" id="transactionDescription" placeholder="Description" class="w-full p-3 rounded-lg border border-gray-600 bg-gray-800 text-white">
+                <input type="number" id="transactionAmount" placeholder="Amount" class="w-full p-3 rounded-lg border border-gray-600 bg-gray-800 text-white">
+                <select id="transactionType" class="w-full p-3 rounded-lg border border-gray-600 bg-gray-800 text-white">
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+                <button id="saveTransactionBtn" class="w-full p-4 bg-nexa-gold text-card rounded-xl font-semibold hover-bg-nexa-gold-darker transition-colors">Save Transaction</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal (for delete) -->
+    <div id="confirmationModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-card rounded-3xl p-8 shadow-2xl max-w-sm w-full relative">
+            <button id="closeConfirmModal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-300 transition-colors text-2xl">
+                <i class="fas fa-times-circle"></i>
+            </button>
+            <div class="text-center">
+                <i class="fas fa-trash-alt text-red-500 text-5xl mb-4"></i>
+                <h3 class="text-2xl font-bold text-gray-50">Confirm Deletion</h3>
+                <p class="mt-2 text-gray-400">Are you sure you want to delete this transaction? This action cannot be undone.</p>
+            </div>
+            <div class="mt-6 flex justify-center space-x-4">
+                <button id="cancelDeleteBtn" class="px-6 py-2 border border-gray-600 rounded-full text-sm font-medium text-gray-400 hover:bg-gray-700 transition-colors">Cancel</button>
+                <button id="confirmDeleteBtn" class="px-6 py-2 bg-red-600 text-white rounded-full text-sm font-medium hover:bg-red-700 transition-colors">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generic Message Modal -->
+    <div id="messageModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-card rounded-3xl p-8 shadow-2xl max-w-sm w-full relative">
+            <button id="closeMessageModal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-300 transition-colors text-2xl">
+                <i class="fas fa-times-circle"></i>
+            </button>
+            <div class="text-center">
+                <i id="messageIcon" class="fas fa-exclamation-circle text-yellow-500 text-5xl mb-4"></i>
+                <h3 id="messageTitle" class="text-2xl font-bold text-gray-50">Alert</h3>
+                <p id="messageText" class="mt-2 text-gray-400"></p>
+            </div>
+            <div class="mt-6 flex justify-center">
+                <button id="okMessageBtn" class="px-6 py-2 bg-nexa-gold text-card rounded-full text-sm font-medium hover-bg-nexa-gold-darker transition-colors">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Elements ---
+            const loginPage = document.getElementById('loginPage');
+            const signupPage = document.getElementById('signupPage');
+            const mainAppPage = document.getElementById('mainAppPage');
+            const toSignupLink = document.getElementById('toSignupLink');
+            const toLoginLink = document.getElementById('toLoginLink');
+            const loginBtn = document.getElementById('loginBtn');
+            const signupBtn = document.getElementById('signupBtn');
+            const logoutBtn = document.getElementById('nav-logout');
+
+            // Navigation and Content sections
+            const navDashboard = document.getElementById('nav-dashboard');
+            const navTransactions = document.getElementById('nav-transactions');
+            const navWallets = document.getElementById('nav-wallets');
+            const navInvoices = document.getElementById('nav-invoices');
+            const navTransfer = document.getElementById('nav-transfer'); // New transfer nav
+            const navSettings = document.getElementById('nav-settings');
+            const headerSettingsBtn = document.getElementById('header-settings-btn');
+
+            const dashboardContent = document.getElementById('dashboardContent');
+            const transactionsContent = document.getElementById('transactionsContent');
+            const walletsContent = document.getElementById('walletsContent');
+            const invoicesContent = document.getElementById('invoicesContent');
+            const transferContent = document.getElementById('transferContent'); // New transfer content
+            const settingsContent = document.getElementById('settingsContent');
+            const mainTitle = document.getElementById('mainTitle');
+
+            const userNameEl = document.getElementById('userName');
+            const userAvatarEl = document.getElementById('userAvatar');
+            const totalBalanceEl = document.getElementById('totalBalance');
+            const totalIncomeEl = document.getElementById('totalIncome');
+            const totalExpensesEl = document.getElementById('totalExpenses');
+            const totalSavedEl = document.getElementById('totalSaved');
+            const dashboardTransactionTableBody = document.getElementById('dashboardTransactionTableBody');
+            const allTransactionTableBody = document.getElementById('allTransactionTableBody');
+
+            const addTransactionBtn = document.getElementById('addTransactionBtn');
+            const addTransactionBtnTrans = document.getElementById('addTransactionBtnTrans');
+            const transactionModal = document.getElementById('transactionModal');
+            const closeTransactionModalBtn = document.getElementById('closeTransactionModalBtn');
+            const saveTransactionBtn = document.getElementById('saveTransactionBtn');
+            const transactionDescriptionInput = document.getElementById('transactionDescription');
+            const transactionAmountInput = document.getElementById('transactionAmount');
+            const transactionTypeSelect = document.getElementById('transactionType');
+
+            const transferMoneyBtn = document.getElementById('transferMoneyBtn');
+            const transferRecipientEmailInput = document.getElementById('transferRecipientEmail');
+            const transferAmountInput = document.getElementById('transferAmount');
+            const executeTransferBtn = document.getElementById('executeTransferBtn');
+
+            const mainWalletBalanceEl = document.getElementById('mainWalletBalance');
+            const walletOwnerNameEl = document.getElementById('walletOwnerName');
+            const virtualCardNumberEl = document.getElementById('virtualCardNumber');
+            const virtualCardOwnerNameEl = document.getElementById('virtualCardOwnerName');
+
+            const invoiceTableBody = document.getElementById('invoiceTableBody');
+            const addInvoiceBtn = document.getElementById('addInvoiceBtn');
+
+            const confirmationModal = document.getElementById('confirmationModal');
+            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+            const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+            const closeConfirmModalBtn = document.getElementById('closeConfirmModal');
+            let transactionToDeleteId = null;
+
+            const withdrawBtn = document.getElementById('withdrawBtn');
+
+            // Message Modal elements
+            const messageModal = document.getElementById('messageModal');
+            const messageTitleEl = document.getElementById('messageTitle');
+            const messageTextEl = document.getElementById('messageText');
+            const messageIconEl = document.getElementById('messageIcon');
+            const okMessageBtn = document.getElementById('okMessageBtn');
+            const closeMessageModalBtn = document.getElementById('closeMessageModal');
+
+            // Settings form elements
+            const settingsNameInput = document.getElementById('settingsName');
+            const settingsEmailInput = document.getElementById('settingsEmail');
+            const settingsPasswordInput = document.getElementById('settingsPassword');
+            const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+
+
+            // --- Data Management (Local Storage) ---
+            const getUsers = () => JSON.parse(localStorage.getItem('nexa_users')) || [];
+            const setUsers = (users) => localStorage.setItem('nexa_users', JSON.stringify(users));
+            const getTransactions = (email) => JSON.parse(localStorage.getItem(`nexa_transactions_${email}`)) || [];
+            const setTransactions = (email, transactions) => localStorage.setItem(`nexa_transactions_${email}`, JSON.stringify(transactions));
+            const getInvoices = (email) => JSON.parse(localStorage.getItem(`nexa_invoices_${email}`)) || [];
+            const setInvoices = (email, invoices) => localStorage.setItem(`nexa_invoices_${email}`, JSON.stringify(invoices));
+            let currentUser = null;
+
+            // --- UI/Page Navigation ---
+            const showPage = (pageToShow) => {
+                const pages = [loginPage, signupPage, mainAppPage];
+                pages.forEach(page => page.classList.remove('show'));
+                pageToShow.classList.add('show');
+            };
+
+            const showContent = (contentToShow) => {
+                const contents = [dashboardContent, transactionsContent, walletsContent, invoicesContent, transferContent, settingsContent];
+                contents.forEach(content => content.classList.add('hidden'));
+                contentToShow.classList.remove('hidden');
+            };
+
+            const setActiveNav = (navItem) => {
+                const navItems = [navDashboard, navTransactions, navWallets, navInvoices, navTransfer, navSettings];
+                navItems.forEach(item => {
+                    item.classList.remove('nav-active');
+                    item.classList.add('text-gray-400', 'hover:bg-gray-700');
+                });
+                navItem.classList.add('nav-active');
+                navItem.classList.remove('text-gray-400', 'hover:bg-gray-700');
+            };
+
+            const showMessage = (title, message, iconClass, iconColor) => {
+                messageTitleEl.textContent = title;
+                messageTextEl.textContent = message;
+                messageIconEl.className = iconClass;
+                messageIconEl.style.color = iconColor;
+                messageModal.classList.remove('hidden');
+                messageModal.classList.add('show');
+            };
+
+            const hideMessage = () => {
+                messageModal.classList.remove('show');
+                messageModal.classList.add('hidden');
+            };
+
+            const setCurrentUser = (user) => {
+                currentUser = user;
+                if (user) {
+                    userNameEl.textContent = user.name;
+                    userAvatarEl.src = `https://placehold.co/40x40/cccccc/333333?text=${user.name.charAt(0).toUpperCase()}`;
+                    renderDashboard();
+                    renderWallets();
+                    renderInvoices();
+                    showPage(mainAppPage);
+                    setActiveNav(navDashboard);
+                    showContent(dashboardContent);
+                    mainTitle.textContent = "Dashboard";
+                } else {
+                    showPage(loginPage);
+                }
+            };
+
+            // Function to generate a random 16-digit card number
+            const generateRandomCardNumber = () => {
+                let cardNumber = '';
+                for (let i = 0; i < 16; i++) {
+                    cardNumber += Math.floor(Math.random() * 10);
+                }
+                return cardNumber.replace(/(.{4})/g, '$1 ').trim();
+            };
+
+            // --- Rendering Functions ---
+            const renderDashboard = () => {
+                if (!currentUser) return;
+
+                const transactions = getTransactions(currentUser.email);
+                let totalIncome = 0;
+                let totalExpenses = 0;
+
+                transactions.forEach(t => {
+                    if (t.type === 'income') {
+                        totalIncome += parseFloat(t.amount);
+                    } else {
+                        totalExpenses += parseFloat(t.amount);
+                    }
+                });
+
+                const totalBalance = totalIncome - totalExpenses;
+                const totalSaved = totalIncome * 0.10; // A simple calculation for a dynamic value
+
+                totalBalanceEl.textContent = `$${totalBalance.toFixed(2)}`;
+                totalIncomeEl.textContent = `$${totalIncome.toFixed(2)}`;
+                totalExpensesEl.textContent = `$${totalExpenses.toFixed(2)}`;
+                totalSavedEl.textContent = `$${totalSaved.toFixed(2)}`;
+                mainWalletBalanceEl.textContent = `$${totalBalance.toFixed(2)}`;
+
+                // Show only the 5 most recent transactions on the dashboard
+                const recentTransactions = transactions.slice(0, 5);
+                renderTransactions(dashboardTransactionTableBody, recentTransactions);
+                renderTransactions(allTransactionTableBody, transactions);
+            };
+
+            const renderTransactions = (tableBody, transactions) => {
+                tableBody.innerHTML = '';
+                if (transactions.length === 0) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td colspan="4" class="px-6 py-4 text-center text-gray-500">No transactions yet.</td>`;
+                    tableBody.appendChild(row);
+                    return;
+                }
+
+                transactions.forEach(t => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-100">${t.description}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold ${t.type === 'income' ? 'text-green-400' : 'text-red-400'}">
+                            ${t.type === 'income' ? '+' : '-'}$${parseFloat(t.amount).toFixed(2)}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">${t.date}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button class="text-red-400 hover:text-red-300 transition-colors" data-id="${t.id}">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            };
+
+            const renderWallets = () => {
+                if (!currentUser) return;
+                // Set the user's name on the wallet cards
+                walletOwnerNameEl.textContent = currentUser.name;
+                virtualCardOwnerNameEl.textContent = currentUser.name;
+                // Generate a new random card number each time the page is viewed
+                virtualCardNumberEl.textContent = generateRandomCardNumber();
+            };
+
+            const renderInvoices = () => {
+                if (!currentUser) return;
+                const invoices = getInvoices(currentUser.email);
+                invoiceTableBody.innerHTML = '';
+
+                if (invoices.length === 0) {
+                     const row = document.createElement('tr');
+                     row.innerHTML = `<td colspan="5" class="px-6 py-4 text-center text-gray-500">No invoices found.</td>`;
+                     invoiceTableBody.appendChild(row);
+                     return;
+                }
+
+                invoices.forEach(i => {
+                    const statusColor = i.status === 'Paid' ? 'text-green-500' : 'text-yellow-500';
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">${i.id}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">${i.recipient}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">$${parseFloat(i.amount).toFixed(2)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">${i.dueDate}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColor}">
+                                ${i.status}
+                            </span>
+                        </td>
+                    `;
+                    invoiceTableBody.appendChild(row);
+                });
+            };
+
+            const renderTransferPage = () => {
+                 // No need to populate a dropdown anymore, as it's a free-form email input.
+            };
+
+            const renderSettings = () => {
+                if (!currentUser) return;
+                settingsNameInput.value = currentUser.name;
+                settingsEmailInput.value = currentUser.email;
+                settingsPasswordInput.value = ''; // Don't pre-fill the password for security
+            };
+
+            // --- Event Handlers ---
+            toSignupLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                showPage(signupPage);
+            });
+
+            toLoginLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                showPage(loginPage);
+            });
+
+            loginBtn.addEventListener('click', () => {
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                const users = getUsers();
+                const user = users.find(u => u.email === email && u.password === password);
+                if (user) {
+                    setCurrentUser(user);
+                } else {
+                    showMessage('Login Failed', 'Invalid email or password. Please try again.', 'fas fa-exclamation-circle', '#ef4444');
+                }
+            });
+
+            signupBtn.addEventListener('click', () => {
+                const name = document.getElementById('signupName').value;
+                const email = document.getElementById('signupEmail').value;
+                const password = document.getElementById('signupPassword').value;
+                const users = getUsers();
+                if (users.some(u => u.email === email)) {
+                    showMessage('Sign-up Failed', 'An account with this email already exists.', 'fas fa-exclamation-circle', '#ef4444');
+                } else {
+                    const newUser = { name, email, password };
+                    setUsers([...users, newUser]);
+
+                    // Initialize with mock data and the new sign-up bonus
+                    const mockTransactions = [
+                        { id: 't1', description: 'Sign-up Bonus', amount: 250.00, type: 'income', date: new Date().toLocaleDateString() },
+                        { id: 't2', description: 'Groceries', amount: 75.50, type: 'expense', date: '2025-08-05' },
+                        { id: 't3', description: 'Netflix Subscription', amount: 15.99, type: 'expense', date: '2025-08-07' }
+                    ];
+                    const mockInvoices = [
+                        { id: 'INV-001', recipient: 'Alice Johnson', amount: 120.00, dueDate: '2025-09-01', status: 'Pending' },
+                        { id: 'INV-002', recipient: 'Tech Services Inc.', amount: 250.00, dueDate: '2025-08-15', status: 'Paid' },
+                        { id: 'INV-003', recipient: 'Freelance Gig', amount: 500.00, dueDate: '2025-08-20', status: 'Pending' }
+                    ];
+                    setTransactions(email, mockTransactions);
+                    setInvoices(email, mockInvoices);
+
+                    showMessage('Success!', 'Account created successfully! Please log in.', 'fas fa-check-circle', '#22c55e');
+                    showPage(loginPage);
+                }
+            });
+
+            logoutBtn.addEventListener('click', () => {
+                currentUser = null;
+                showPage(loginPage);
+            });
+
+            // Navigation Handlers
+            navDashboard.addEventListener('click', (e) => {
+                e.preventDefault();
+                setActiveNav(navDashboard);
+                showContent(dashboardContent);
+                mainTitle.textContent = "Dashboard";
+                renderDashboard();
+            });
+
+            navTransactions.addEventListener('click', (e) => {
+                e.preventDefault();
+                setActiveNav(navTransactions);
+                showContent(transactionsContent);
+                mainTitle.textContent = "All Transactions";
+                renderDashboard(); // Re-render to show all transactions
+            });
+
+            navWallets.addEventListener('click', (e) => {
+                e.preventDefault();
+                setActiveNav(navWallets);
+                showContent(walletsContent);
+                mainTitle.textContent = "My Wallets";
+                renderWallets();
+            });
+
+            navInvoices.addEventListener('click', (e) => {
+                e.preventDefault();
+                setActiveNav(navInvoices);
+                showContent(invoicesContent);
+                mainTitle.textContent = "Invoices";
+                renderInvoices();
+            });
+
+            navTransfer.addEventListener('click', (e) => {
+                e.preventDefault();
+                setActiveNav(navTransfer);
+                showContent(transferContent);
+                mainTitle.textContent = "Transfer Money";
+                // No need to call renderTransferPage, as there's no dynamic rendering for the new input field.
+            });
+
+            transferMoneyBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                setActiveNav(navTransfer);
+                showContent(transferContent);
+                mainTitle.textContent = "Transfer Money";
+            });
+
+            navSettings.addEventListener('click', (e) => {
+                e.preventDefault();
+                setActiveNav(navSettings);
+                showContent(settingsContent);
+                mainTitle.textContent = "Settings";
+                renderSettings();
+            });
+
+            headerSettingsBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                setActiveNav(navSettings);
+                showContent(settingsContent);
+                mainTitle.textContent = "Settings";
+                renderSettings();
+            });
+
+            withdrawBtn.addEventListener('click', () => {
+                showMessage('Withdrawal Unavailable', 'This is a fictional bank. Withdrawal functionality is not enabled.', 'fas fa-info-circle', '#3b82f6');
+            });
+
+
+            // Transaction Modal
+            const openTransactionModal = () => {
+                transactionModal.classList.remove('hidden');
+                transactionModal.classList.add('show');
+            };
+
+            addTransactionBtn.addEventListener('click', openTransactionModal);
+            addTransactionBtnTrans.addEventListener('click', openTransactionModal);
+
+            closeTransactionModalBtn.addEventListener('click', () => {
+                transactionModal.classList.remove('show');
+                transactionModal.classList.add('hidden');
+            });
+
+            transactionModal.addEventListener('click', (e) => {
+                if (e.target === transactionModal) {
+                    transactionModal.classList.remove('show');
+                    transactionModal.classList.add('hidden');
+                }
+            });
+
+            saveTransactionBtn.addEventListener('click', () => {
+                const description = transactionDescriptionInput.value.trim();
+                const amount = parseFloat(transactionAmountInput.value);
+                const type = transactionTypeSelect.value;
+
+                if (description && !isNaN(amount) && amount > 0 && currentUser) {
+                    const transactions = getTransactions(currentUser.email);
+                    const newTransaction = {
+                        id: Date.now().toString(),
+                        description,
+                        amount,
+                        type,
+                        date: new Date().toLocaleDateString(),
+                    };
+                    setTransactions(currentUser.email, [newTransaction, ...transactions]);
+                    transactionDescriptionInput.value = '';
+                    transactionAmountInput.value = '';
+                    transactionModal.classList.remove('show');
+                    transactionModal.classList.add('hidden');
+                    renderDashboard();
+                } else {
+                    showMessage('Validation Error', 'Please fill out all fields correctly. The amount must be a positive number.', 'fas fa-exclamation-triangle', '#f59e0b');
+                }
+            });
+
+            // Add Invoice Button (placeholder for now)
+            addInvoiceBtn.addEventListener('click', () => {
+                showMessage('Feature Unavailable', 'Adding new invoices is not yet implemented. This is a placeholder.', 'fas fa-info-circle', '#3b82f6');
+            });
+
+            // Transfer Page Logic
+            executeTransferBtn.addEventListener('click', () => {
+                const recipientEmail = transferRecipientEmailInput.value.trim();
+                const amount = parseFloat(transferAmountInput.value);
+
+                if (!recipientEmail || isNaN(amount) || amount <= 0) {
+                    showMessage('Validation Error', 'Please enter a valid recipient email and a positive amount.', 'fas fa-exclamation-triangle', '#f59e0b');
+                    return;
+                }
+
+                // Get sender's transactions to check balance
+                const senderTransactions = getTransactions(currentUser.email);
+                const totalIncome = senderTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + parseFloat(t.amount), 0);
+                const totalExpenses = senderTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + parseFloat(t.amount), 0);
+                const currentBalance = totalIncome - totalExpenses;
+
+                if (amount > currentBalance) {
+                    showMessage('Insufficient Funds', 'You do not have enough funds to complete this transfer.', 'fas fa-exclamation-triangle', '#f59e0b');
+                    return;
+                }
+
+                // Find the recipient user
+                const users = getUsers();
+                const recipient = users.find(u => u.email === recipientEmail);
+
+                // Add expense transaction for the current user (sender)
+                const newSenderTransaction = {
+                    id: Date.now().toString(),
+                    description: `Transfer to ${recipient ? recipient.name : recipientEmail}`,
+                    amount: amount,
+                    type: 'expense',
+                    date: new Date().toLocaleDateString(),
+                };
+                setTransactions(currentUser.email, [newSenderTransaction, ...senderTransactions]);
+
+                if (recipient) {
+                    // Add income transaction for the recipient only if they exist
+                    const recipientTransactions = getTransactions(recipientEmail);
+                    const newRecipientTransaction = {
+                        id: `transfer-${Date.now().toString()}`,
+                        description: `Transfer from ${currentUser.name}`,
+                        amount: amount,
+                        type: 'income',
+                        date: new Date().toLocaleDateString(),
+                    };
+                    setTransactions(recipientEmail, [newRecipientTransaction, ...recipientTransactions]);
+                    showMessage('Success!', `Successfully transferred $${amount.toFixed(2)} to registered user ${recipient.name}.`, 'fas fa-check-circle', '#22c55e');
+                } else {
+                    // If no recipient is found, just show a success message for the sender
+                    showMessage('Success!', `Successfully transferred $${amount.toFixed(2)} to ${recipientEmail}. The recipient is not a registered user.`, 'fas fa-check-circle', '#22c55e');
+                }
+
+
+                transferAmountInput.value = '';
+                transferRecipientEmailInput.value = '';
+
+                renderDashboard(); // Update the dashboard with the new balance
+            });
+
+            okMessageBtn.addEventListener('click', hideMessage);
+            closeMessageModalBtn.addEventListener('click', hideMessage);
+
+            messageModal.addEventListener('click', (e) => {
+                if (e.target === messageModal) {
+                    hideMessage();
+                }
+            });
+
+            // Delete Transaction from both tables
+            const handleDeleteClick = (e) => {
+                const deleteButton = e.target.closest('button');
+                if (deleteButton && deleteButton.getAttribute('data-id')) {
+                    transactionToDeleteId = deleteButton.getAttribute('data-id');
+                    confirmationModal.classList.remove('hidden');
+                    confirmationModal.classList.add('show');
+                }
+            };
+
+            dashboardTransactionTableBody.addEventListener('click', handleDeleteClick);
+            allTransactionTableBody.addEventListener('click', handleDeleteClick);
+
+            cancelDeleteBtn.addEventListener('click', () => {
+                confirmationModal.classList.remove('show');
+                confirmationModal.classList.add('hidden');
+                transactionToDeleteId = null;
+            });
+
+            closeConfirmModalBtn.addEventListener('click', () => {
+                 confirmationModal.classList.remove('show');
+                 confirmationModal.classList.add('hidden');
+                 transactionToDeleteId = null;
+            });
+
+            confirmDeleteBtn.addEventListener('click', () => {
+                if (transactionToDeleteId && currentUser) {
+                    let transactions = getTransactions(currentUser.email);
+                    transactions = transactions.filter(t => t.id !== transactionToDeleteId);
+                    setTransactions(currentUser.email, transactions);
+                    renderDashboard();
+                    confirmationModal.classList.remove('show');
+                    confirmationModal.classList.add('hidden');
+                    transactionToDeleteId = null;
+                }
+            });
+
+            // Settings form handler
+            saveSettingsBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (!currentUser) return;
+
+                const newName = settingsNameInput.value.trim();
+                const newPassword = settingsPasswordInput.value.trim();
+
+                if (newName === '' && newPassword === '') {
+                    showMessage('Validation Error', 'No changes to save.', 'fas fa-exclamation-triangle', '#f59e0b');
+                    return;
+                }
+
+                let users = getUsers();
+                const userIndex = users.findIndex(u => u.email === currentUser.email);
+
+                if (userIndex !== -1) {
+                    // Update user details
+                    if (newName !== '') {
+                        users[userIndex].name = newName;
+                        currentUser.name = newName;
+                    }
+                    if (newPassword !== '') {
+                        users[userIndex].password = newPassword;
+                        currentUser.password = newPassword;
+                    }
+
+                    // Save back to localStorage
+                    setUsers(users);
+
+                    // Update the UI
+                    userNameEl.textContent = currentUser.name;
+                    userAvatarEl.src = `https://placehold.co/40x40/cccccc/333333?text=${currentUser.name.charAt(0).toUpperCase()}`;
+                    walletOwnerNameEl.textContent = currentUser.name;
+                    virtualCardOwnerNameEl.textContent = currentUser.name;
+
+                    showMessage('Success!', 'Your account settings have been updated.', 'fas fa-check-circle', '#22c55e');
+                    renderSettings(); // Re-render the settings page to clear password field
+                } else {
+                    showMessage('Error', 'Could not find user. Please log out and log back in.', 'fas fa-exclamation-circle', '#ef4444');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
