@@ -55,7 +55,7 @@
     <section id="loginPage" class="page-container show items-center justify-center p-4">
         <div class="w-full max-w-md bg-card rounded-3xl shadow-2xl p-8 sm:p-10">
             <div class="text-center">
-                <img src="IMG_3859.png" alt="Nexa logo" class="h-16 mx-auto">
+                <img src="http://googleusercontent.com/file_content/5" alt="Nexa logo" class="h-16 mx-auto">
                 <p class="text-gray-400 mt-4">Welcome back! Please sign in.</p>
             </div>
             <div class="mt-8 space-y-4">
@@ -76,7 +76,7 @@
     <section id="signupPage" class="page-container items-center justify-center p-4">
         <div class="w-full max-w-md bg-card rounded-3xl shadow-2xl p-8 sm:p-10">
             <div class="text-center">
-                <img src="IMG_3859.png" alt="Nexa logo" class="h-16 mx-auto">
+                <img src="http://googleusercontent.com/file_content/5" alt="Nexa logo" class="h-16 mx-auto">
                 <p class="text-gray-400 mt-4">Create a new account</p>
             </div>
             <div class="mt-8 space-y-4">
@@ -99,7 +99,7 @@
         <!-- Sidebar -->
         <aside class="w-full lg:w-1/4 p-6 bg-card rounded-3xl shadow-xl flex flex-col items-center space-y-8 lg:mr-8 mb-4 lg:mb-0">
             <div class="flex items-center w-full justify-center">
-                <img src="IMG_3859.png" alt="Nexa logo" class="h-8">
+                <img src="http://googleusercontent.com/file_content/5" alt="Nexa logo" class="h-8">
             </div>
             <nav class="w-full space-y-2">
                 <a href="#" id="nav-dashboard" class="flex items-center p-3 rounded-xl cursor-pointer transition-colors duration-200 nav-active font-semibold">
@@ -491,6 +491,515 @@
             const settingsEmailInput = document.getElementById('settingsEmail');
             const settingsPasswordInput = document.getElementById('settingsPassword');
             const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+
+
+            // --- Data Management (Local Storage) ---
+            const getUsers = () => JSON.parse(localStorage.getItem('nexa_users')) || [];
+            const setUsers = (users) => localStorage.setItem('nexa_users', JSON.stringify(users));
+            const getTransactions = (email) => JSON.parse(localStorage.getItem(`nexa_transactions_${email}`)) || [];
+            const setTransactions = (email, transactions) => localStorage.setItem(`nexa_transactions_${email}`, JSON.stringify(transactions));
+            const getInvoices = (email) => JSON.parse(localStorage.getItem(`nexa_invoices_${email}`)) || [];
+            const setInvoices = (email, invoices) => localStorage.setItem(`nexa_invoices_${email}`, JSON.stringify(invoices));
+            let currentUser = null;
+
+            // --- UI/Page Navigation ---
+            const showPage = (pageToShow) => {
+                const pages = [loginPage, signupPage, mainAppPage];
+                pages.forEach(page => page.classList.remove('show'));
+                pageToShow.classList.add('show');
+            };
+
+            const showContent = (contentToShow) => {
+                const contents = [dashboardContent, transactionsContent, walletsContent, invoicesContent, transferContent, settingsContent];
+                contents.forEach(content => content.classList.add('hidden'));
+                contentToShow.classList.remove('hidden');
+            };
+
+            const setActiveNav = (navItem) => {
+                const navItems = [navDashboard, navTransactions, navWallets, navInvoices, navTransfer, navSettings];
+                navItems.forEach(item => {
+                    item.classList.remove('nav-active');
+                    item.classList.add('text-gray-400', 'hover:bg-gray-700');
+                });
+                navItem.classList.add('nav-active');
+                navItem.classList.remove('text-gray-400', 'hover:bg-gray-700');
+            };
+
+            const showMessage = (title, message, iconClass, iconColor) => {
+                messageTitleEl.textContent = title;
+                messageTextEl.textContent = message;
+                messageIconEl.className = iconClass;
+                messageIconEl.style.color = iconColor;
+                messageModal.classList.remove('hidden');
+                messageModal.classList.add('show');
+            };
+
+            const hideMessage = () => {
+                messageModal.classList.remove('show');
+                messageModal.classList.add('hidden');
+            };
+
+            const setCurrentUser = (user) => {
+                currentUser = user;
+                if (user) {
+                    userNameEl.textContent = user.name;
+                    userAvatarEl.src = `https://placehold.co/40x40/cccccc/333333?text=${user.name.charAt(0).toUpperCase()}`;
+                    renderDashboard();
+                    renderWallets();
+                    renderInvoices();
+                    showPage(mainAppPage);
+                    setActiveNav(navDashboard);
+                    showContent(dashboardContent);
+                    mainTitle.textContent = "Dashboard";
+                } else {
+                    showPage(loginPage);
+                }
+            };
+
+            // Function to generate a random 16-digit card number
+            const generateRandomCardNumber = () => {
+                let cardNumber = '';
+                for (let i = 0; i < 16; i++) {
+                    cardNumber += Math.floor(Math.random() * 10);
+                }
+                return cardNumber.replace(/(.{4})/g, '$1 ').trim();
+            };
+
+            // --- Rendering Functions ---
+            const renderDashboard = () => {
+                if (!currentUser) return;
+
+                const transactions = getTransactions(currentUser.email);
+                let totalIncome = 0;
+                let totalExpenses = 0;
+
+                transactions.forEach(t => {
+                    if (t.type === 'income') {
+                        totalIncome += parseFloat(t.amount);
+                    } else {
+                        totalExpenses += parseFloat(t.amount);
+                    }
+                });
+
+                const totalBalance = totalIncome - totalExpenses;
+                const totalSaved = totalIncome * 0.10; // A simple calculation for a dynamic value
+
+                totalBalanceEl.textContent = `$${totalBalance.toFixed(2)}`;
+                totalIncomeEl.textContent = `$${totalIncome.toFixed(2)}`;
+                totalExpensesEl.textContent = `$${totalExpenses.toFixed(2)}`;
+                totalSavedEl.textContent = `$${totalSaved.toFixed(2)}`;
+                mainWalletBalanceEl.textContent = `$${totalBalance.toFixed(2)}`;
+
+                // Show only the 5 most recent transactions on the dashboard
+                const recentTransactions = transactions.slice(0, 5);
+                renderTransactions(dashboardTransactionTableBody, recentTransactions);
+                renderTransactions(allTransactionTableBody, transactions);
+            };
+
+            const renderTransactions = (tableBody, transactions) => {
+                tableBody.innerHTML = '';
+                if (transactions.length === 0) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td colspan="4" class="px-6 py-4 text-center text-gray-500">No transactions yet.</td>`;
+                    tableBody.appendChild(row);
+                    return;
+                }
+
+                transactions.forEach(t => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-100">${t.description}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold ${t.type === 'income' ? 'text-green-400' : 'text-red-400'}">
+                            ${t.type === 'income' ? '+' : '-'}$${parseFloat(t.amount).toFixed(2)}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">${t.date}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button class="text-red-400 hover:text-red-300 transition-colors" data-id="${t.id}">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            };
+
+            const renderWallets = () => {
+                if (!currentUser) return;
+                // Set the user's name on the wallet cards
+                walletOwnerNameEl.textContent = currentUser.name;
+                virtualCardOwnerNameEl.textContent = currentUser.name;
+                // Generate a new random card number each time the page is viewed
+                virtualCardNumberEl.textContent = generateRandomCardNumber();
+            };
+
+            const renderInvoices = () => {
+                if (!currentUser) return;
+                const invoices = getInvoices(currentUser.email);
+                invoiceTableBody.innerHTML = '';
+
+                if (invoices.length === 0) {
+                     const row = document.createElement('tr');
+                     row.innerHTML = `<td colspan="5" class="px-6 py-4 text-center text-gray-500">No invoices found.</td>`;
+                     invoiceTableBody.appendChild(row);
+                     return;
+                }
+
+                invoices.forEach(i => {
+                    const statusColor = i.status === 'Paid' ? 'text-green-500' : 'text-yellow-500';
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">${i.id}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">${i.recipient}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">$${parseFloat(i.amount).toFixed(2)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">${i.dueDate}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColor}">
+                                ${i.status}
+                            </span>
+                        </td>
+                    `;
+                    invoiceTableBody.appendChild(row);
+                });
+            };
+
+            const renderTransferPage = () => {
+                 // No need to populate a dropdown anymore, as it's a free-form email input.
+            };
+
+            const renderSettings = () => {
+                if (!currentUser) return;
+                settingsNameInput.value = currentUser.name;
+                settingsEmailInput.value = currentUser.email;
+                settingsPasswordInput.value = ''; // Don't pre-fill the password for security
+            };
+
+            // --- Event Handlers ---
+            toSignupLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                showPage(signupPage);
+            });
+
+            toLoginLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                showPage(loginPage);
+            });
+
+            loginBtn.addEventListener('click', () => {
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                const users = getUsers();
+                const user = users.find(u => u.email === email && u.password === password);
+                if (user) {
+                    setCurrentUser(user);
+                } else {
+                    showMessage('Login Failed', 'Invalid email or password. Please try again.', 'fas fa-exclamation-circle', '#ef4444');
+                }
+            });
+
+            signupBtn.addEventListener('click', () => {
+                const name = document.getElementById('signupName').value;
+                const email = document.getElementById('signupEmail').value;
+                const password = document.getElementById('signupPassword').value;
+                const users = getUsers();
+                if (users.some(u => u.email === email)) {
+                    showMessage('Sign-up Failed', 'An account with this email already exists.', 'fas fa-exclamation-circle', '#ef4444');
+                } else {
+                    const newUser = { name, email, password };
+                    setUsers([...users, newUser]);
+
+                    // Initialize with mock data and the new sign-up bonus
+                    const mockTransactions = [
+                        { id: 't1', description: 'Sign-up Bonus', amount: 250.00, type: 'income', date: new Date().toLocaleDateString() },
+                        { id: 't2', description: 'Groceries', amount: 75.50, type: 'expense', date: '2025-08-05' },
+                        { id: 't3', description: 'Netflix Subscription', amount: 15.99, type: 'expense', date: '2025-08-07' }
+                    ];
+                    const mockInvoices = [
+                        { id: 'INV-001', recipient: 'Alice Johnson', amount: 120.00, dueDate: '2025-09-01', status: 'Pending' },
+                        { id: 'INV-002', recipient: 'Tech Services Inc.', amount: 250.00, dueDate: '2025-08-15', status: 'Paid' },
+                        { id: 'INV-003', recipient: 'Freelance Gig', amount: 500.00, dueDate: '2025-08-20', status: 'Pending' }
+                    ];
+                    setTransactions(email, mockTransactions);
+                    setInvoices(email, mockInvoices);
+
+                    showMessage('Success!', 'Account created successfully! Please log in.', 'fas fa-check-circle', '#22c55e');
+                    showPage(loginPage);
+                }
+            });
+
+            logoutBtn.addEventListener('click', () => {
+                currentUser = null;
+                showPage(loginPage);
+            });
+
+            // Navigation Handlers
+            navDashboard.addEventListener('click', (e) => {
+                e.preventDefault();
+                setActiveNav(navDashboard);
+                showContent(dashboardContent);
+                mainTitle.textContent = "Dashboard";
+                renderDashboard();
+            });
+
+            navTransactions.addEventListener('click', (e) => {
+                e.preventDefault();
+                setActiveNav(navTransactions);
+                showContent(transactionsContent);
+                mainTitle.textContent = "All Transactions";
+                renderDashboard(); // Re-render to show all transactions
+            });
+
+            navWallets.addEventListener('click', (e) => {
+                e.preventDefault();
+                setActiveNav(navWallets);
+                showContent(walletsContent);
+                mainTitle.textContent = "My Wallets";
+                renderWallets();
+            });
+
+            navInvoices.addEventListener('click', (e) => {
+                e.preventDefault();
+                setActiveNav(navInvoices);
+                showContent(invoicesContent);
+                mainTitle.textContent = "Invoices";
+                renderInvoices();
+            });
+
+            navTransfer.addEventListener('click', (e) => {
+                e.preventDefault();
+                setActiveNav(navTransfer);
+                showContent(transferContent);
+                mainTitle.textContent = "Transfer Money";
+                // No need to call renderTransferPage, as there's no dynamic rendering for the new input field.
+            });
+
+            transferMoneyBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                setActiveNav(navTransfer);
+                showContent(transferContent);
+                mainTitle.textContent = "Transfer Money";
+            });
+
+            navSettings.addEventListener('click', (e) => {
+                e.preventDefault();
+                setActiveNav(navSettings);
+                showContent(settingsContent);
+                mainTitle.textContent = "Settings";
+                renderSettings();
+            });
+
+            headerSettingsBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                setActiveNav(navSettings);
+                showContent(settingsContent);
+                mainTitle.textContent = "Settings";
+                renderSettings();
+            });
+
+            withdrawBtn.addEventListener('click', () => {
+                showMessage('Withdrawal Unavailable', 'This is a fictional bank. Withdrawal functionality is not enabled.', 'fas fa-info-circle', '#3b82f6');
+            });
+
+
+            // Transaction Modal
+            const openTransactionModal = () => {
+                transactionModal.classList.remove('hidden');
+                transactionModal.classList.add('show');
+            };
+
+            addTransactionBtn.addEventListener('click', openTransactionModal);
+            addTransactionBtnTrans.addEventListener('click', openTransactionModal);
+
+            closeTransactionModalBtn.addEventListener('click', () => {
+                transactionModal.classList.remove('show');
+                transactionModal.classList.add('hidden');
+            });
+
+            transactionModal.addEventListener('click', (e) => {
+                if (e.target === transactionModal) {
+                    transactionModal.classList.remove('show');
+                    transactionModal.classList.add('hidden');
+                }
+            });
+
+            saveTransactionBtn.addEventListener('click', () => {
+                const description = transactionDescriptionInput.value.trim();
+                const amount = parseFloat(transactionAmountInput.value);
+                const type = transactionTypeSelect.value;
+
+                if (description && !isNaN(amount) && amount > 0 && currentUser) {
+                    const transactions = getTransactions(currentUser.email);
+                    const newTransaction = {
+                        id: Date.now().toString(),
+                        description,
+                        amount,
+                        type,
+                        date: new Date().toLocaleDateString(),
+                    };
+                    setTransactions(currentUser.email, [newTransaction, ...transactions]);
+                    transactionDescriptionInput.value = '';
+                    transactionAmountInput.value = '';
+                    transactionModal.classList.remove('show');
+                    transactionModal.classList.add('hidden');
+                    renderDashboard();
+                } else {
+                    showMessage('Validation Error', 'Please fill out all fields correctly. The amount must be a positive number.', 'fas fa-exclamation-triangle', '#f59e0b');
+                }
+            });
+
+            // Add Invoice Button (placeholder for now)
+            addInvoiceBtn.addEventListener('click', () => {
+                showMessage('Feature Unavailable', 'Adding new invoices is not yet implemented. This is a placeholder.', 'fas fa-info-circle', '#3b82f6');
+            });
+
+            // Transfer Page Logic
+            executeTransferBtn.addEventListener('click', () => {
+                const recipientEmail = transferRecipientEmailInput.value.trim();
+                const amount = parseFloat(transferAmountInput.value);
+
+                if (!recipientEmail || isNaN(amount) || amount <= 0) {
+                    showMessage('Validation Error', 'Please enter a valid recipient email and a positive amount.', 'fas fa-exclamation-triangle', '#f59e0b');
+                    return;
+                }
+
+                // Get sender's transactions to check balance
+                const senderTransactions = getTransactions(currentUser.email);
+                const totalIncome = senderTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + parseFloat(t.amount), 0);
+                const totalExpenses = senderTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + parseFloat(t.amount), 0);
+                const currentBalance = totalIncome - totalExpenses;
+
+                if (amount > currentBalance) {
+                    showMessage('Insufficient Funds', 'You do not have enough funds to complete this transfer.', 'fas fa-exclamation-triangle', '#f59e0b');
+                    return;
+                }
+
+                // Find the recipient user
+                const users = getUsers();
+                const recipient = users.find(u => u.email === recipientEmail);
+
+                // Add expense transaction for the current user (sender)
+                const newSenderTransaction = {
+                    id: Date.now().toString(),
+                    description: `Transfer to ${recipient ? recipient.name : recipientEmail}`,
+                    amount: amount,
+                    type: 'expense',
+                    date: new Date().toLocaleDateString(),
+                };
+                setTransactions(currentUser.email, [newSenderTransaction, ...senderTransactions]);
+
+                if (recipient) {
+                    // Add income transaction for the recipient only if they exist
+                    const recipientTransactions = getTransactions(recipientEmail);
+                    const newRecipientTransaction = {
+                        id: `transfer-${Date.now().toString()}`,
+                        description: `Transfer from ${currentUser.name}`,
+                        amount: amount,
+                        type: 'income',
+                        date: new Date().toLocaleDateString(),
+                    };
+                    setTransactions(recipientEmail, [newRecipientTransaction, ...recipientTransactions]);
+                    showMessage('Success!', `Successfully transferred $${amount.toFixed(2)} to registered user ${recipient.name}.`, 'fas fa-check-circle', '#22c55e');
+                } else {
+                    // If no recipient is found, just show a success message for the sender
+                    showMessage('Success!', `Successfully transferred $${amount.toFixed(2)} to ${recipientEmail}. The recipient is not a registered user.`, 'fas fa-check-circle', '#22c55e');
+                }
+
+
+                transferAmountInput.value = '';
+                transferRecipientEmailInput.value = '';
+
+                renderDashboard(); // Update the dashboard with the new balance
+            });
+
+            okMessageBtn.addEventListener('click', hideMessage);
+            closeMessageModalBtn.addEventListener('click', hideMessage);
+
+            messageModal.addEventListener('click', (e) => {
+                if (e.target === messageModal) {
+                    hideMessage();
+                }
+            });
+
+            // Delete Transaction from both tables
+            const handleDeleteClick = (e) => {
+                const deleteButton = e.target.closest('button');
+                if (deleteButton && deleteButton.getAttribute('data-id')) {
+                    transactionToDeleteId = deleteButton.getAttribute('data-id');
+                    confirmationModal.classList.remove('hidden');
+                    confirmationModal.classList.add('show');
+                }
+            };
+
+            dashboardTransactionTableBody.addEventListener('click', handleDeleteClick);
+            allTransactionTableBody.addEventListener('click', handleDeleteClick);
+
+            cancelDeleteBtn.addEventListener('click', () => {
+                confirmationModal.classList.remove('show');
+                confirmationModal.classList.add('hidden');
+                transactionToDeleteId = null;
+            });
+
+            closeConfirmModalBtn.addEventListener('click', () => {
+                 confirmationModal.classList.remove('show');
+                 confirmationModal.classList.add('hidden');
+                 transactionToDeleteId = null;
+            });
+
+            confirmDeleteBtn.addEventListener('click', () => {
+                if (transactionToDeleteId && currentUser) {
+                    let transactions = getTransactions(currentUser.email);
+                    transactions = transactions.filter(t => t.id !== transactionToDeleteId);
+                    setTransactions(currentUser.email, transactions);
+                    renderDashboard();
+                    confirmationModal.classList.remove('show');
+                    confirmationModal.classList.add('hidden');
+                    transactionToDeleteId = null;
+                }
+            });
+
+            // Settings form handler
+            saveSettingsBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (!currentUser) return;
+
+                const newName = settingsNameInput.value.trim();
+                const newPassword = settingsPasswordInput.value.trim();
+
+                if (newName === '' && newPassword === '') {
+                    showMessage('Validation Error', 'No changes to save.', 'fas fa-exclamation-triangle', '#f59e0b');
+                    return;
+                }
+
+                let users = getUsers();
+                const userIndex = users.findIndex(u => u.email === currentUser.email);
+
+                if (userIndex !== -1) {
+                    // Update user details
+                    if (newName !== '') {
+                        users[userIndex].name = newName;
+                        currentUser.name = newName;
+                    }
+                    if (newPassword !== '') {
+                        users[userIndex].password = newPassword;
+                        currentUser.password = newPassword;
+                    }
+
+                    // Save back to localStorage
+                    setUsers(users);
+
+                    // Update the UI
+                    userNameEl.textContent = currentUser.name;
+                    userAvatarEl.src = `https://placehold.co/40x40/cccccc/333333?text=${currentUser.name.charAt(0).toUpperCase()}`;
+                    walletOwnerNameEl.textContent = currentUser.name;
+                    virtualCardOwnerNameEl.textContent = currentUser.name;
+
+                    showMessage('Success!', 'Your account settings have been updated.', 'fas fa-check-circle', '#22c55e');
+                    renderSettings(); // Re-render the settings page to clear password field
+                } else {
+                    showMessage('Error', 'Could not find user. Please log out and log back in.', 'fas fa-exclamation-circle', '#ef4444');
+                }
+            });
         });
     </script>
 </body>
